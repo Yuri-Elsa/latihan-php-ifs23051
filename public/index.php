@@ -1,10 +1,13 @@
 <?php
+session_start();
+
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
     $page = 'index';
 }
-include ('../controllers/TodoController.php');
+
+include('../controllers/TodoController.php');
 
 $todoController = new TodoController();
 switch ($page) {
@@ -19,5 +22,8 @@ switch ($page) {
         break;
     case 'delete':
         $todoController->delete();
+        break;
+    default:
+        $todoController->index();
         break;
 }

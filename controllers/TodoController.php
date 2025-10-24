@@ -21,7 +21,7 @@ class TodoController
             $title = trim($_POST['title'] ?? '');
             $description = trim($_POST['description'] ?? '');
 
-            // ✅ Validasi input kosong
+            // Validasi input kosong
             if (empty($activity) || empty($title)) {
                 $_SESSION['error'] = 'Aktivitas dan Judul tidak boleh kosong!';
                 header('Location: index.php');
@@ -46,19 +46,23 @@ class TodoController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
             $activity = trim($_POST['activity'] ?? '');
+            $title = trim($_POST['title'] ?? '');
+            $description = trim($_POST['description'] ?? '');
             $status = $_POST['status'] ?? '0';
 
-            // ✅ Validasi
-            if (!$id || empty($activity)) {
-                $_SESSION['error'] = 'Data tidak valid!';
+            // Validasi
+            if (!$id || empty($activity) || empty($title)) {
+                $_SESSION['error'] = 'Data tidak valid! Aktivitas dan Judul wajib diisi.';
                 header('Location: index.php');
                 exit;
             }
 
             $todoModel = new TodoModel();
-            $result = $todoModel->updateTodo($id, $activity, $status);
+            $result = $todoModel->updateTodo($id, $activity, $title, $description, $status);
             
-            if ($result) {
+            if (isset($result['error'])) {
+                $_SESSION['error'] = $result['error'];
+            } elseif (isset($result['success'])) {
                 $_SESSION['success'] = 'Todo berhasil diupdate!';
             } else {
                 $_SESSION['error'] = 'Gagal update todo!';
