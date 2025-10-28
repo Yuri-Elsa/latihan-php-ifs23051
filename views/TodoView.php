@@ -6,7 +6,7 @@
     <title>Todo List Yuri</title>
     <link href="/assets/vendor/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <!-- Stars Background -->
@@ -22,7 +22,7 @@
         <!-- Header -->
         <div class="card-header-custom">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <h1><i class="bi bi-list-check"></i> Todo List</h1>
+                <h1><i class="bi bi-stars"></i> Todo List</h1>
                 <button class="btn btn-add-todo" data-bs-toggle="modal" data-bs-target="#addTodo">
                     <i class="bi bi-plus-circle"></i> NEW MISSION
                 </button>
