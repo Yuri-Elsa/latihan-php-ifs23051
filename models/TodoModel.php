@@ -55,19 +55,31 @@ class TodoModel
     }
 
     /**
-     * Create todo baru dengan validasi judul unik
+     * Create todo baru dengan validasi activity dan title unik
      */
     public function createTodo($activity, $title, $description)
     {
+        // Validasi: Cek activity yang sama (case-insensitive)
+        $checkActivity = pg_query_params(
+            $this->conn, 
+            'SELECT COUNT(*) FROM todo WHERE LOWER(activity) = LOWER($1)', 
+            [$activity]
+        );
+        $activityExists = pg_fetch_result($checkActivity, 0, 0);
+        
+        if ($activityExists > 0) {
+            return ['error' => 'Aktivitas sudah ada! Gunakan aktivitas yang berbeda.'];
+        }
+
         // Validasi: Cek judul yang sama (case-insensitive)
-        $check = pg_query_params(
+        $checkTitle = pg_query_params(
             $this->conn, 
             'SELECT COUNT(*) FROM todo WHERE LOWER(title) = LOWER($1)', 
             [$title]
         );
-        $exists = pg_fetch_result($check, 0, 0);
+        $titleExists = pg_fetch_result($checkTitle, 0, 0);
         
-        if ($exists > 0) {
+        if ($titleExists > 0) {
             return ['error' => 'Judul todo sudah ada! Gunakan judul yang berbeda.'];
         }
 
@@ -84,19 +96,31 @@ class TodoModel
     }
 
     /**
-     * Update todo dengan validasi judul unik
+     * Update todo dengan validasi activity dan title unik
      */
     public function updateTodo($id, $activity, $title, $description, $status)
     {
+        // Validasi: Cek activity yang sama pada todo lain
+        $checkActivity = pg_query_params(
+            $this->conn, 
+            'SELECT COUNT(*) FROM todo WHERE LOWER(activity) = LOWER($1) AND id != $2', 
+            [$activity, $id]
+        );
+        $activityExists = pg_fetch_result($checkActivity, 0, 0);
+        
+        if ($activityExists > 0) {
+            return ['error' => 'Aktivitas sudah digunakan oleh todo lain!'];
+        }
+
         // Validasi: Cek judul yang sama pada todo lain
-        $check = pg_query_params(
+        $checkTitle = pg_query_params(
             $this->conn, 
             'SELECT COUNT(*) FROM todo WHERE LOWER(title) = LOWER($1) AND id != $2', 
             [$title, $id]
         );
-        $exists = pg_fetch_result($check, 0, 0);
+        $titleExists = pg_fetch_result($checkTitle, 0, 0);
         
-        if ($exists > 0) {
+        if ($titleExists > 0) {
             return ['error' => 'Judul todo sudah digunakan oleh todo lain!'];
         }
 
