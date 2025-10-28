@@ -389,6 +389,15 @@
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
         
+        /* CSS untuk membuat tombol actions sejajar */
+        .action-buttons {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+        }
+        
         .btn-action {
             padding: 0.6rem 1rem;
             border-radius: 10px;
@@ -396,9 +405,9 @@
             font-weight: 700;
             transition: all 0.3s ease;
             border: 2px solid transparent;
-            margin: 0.2rem;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
         
         .btn-action::before {
@@ -581,6 +590,10 @@
                 padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
             }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -598,7 +611,7 @@
         <!-- Header -->
         <div class="card-header-custom">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <h1><i class="bi bi-stars"></i> TODO LIST </h1>
+                <h1><i class="bi bi-stars"></i> TODO LIST</h1>
                 <button class="btn btn-add-todo" data-bs-toggle="modal" data-bs-target="#addTodo">
                     <i class="bi bi-plus-circle"></i> NEW MISSION
                 </button>
@@ -684,7 +697,7 @@
                             <th>Mission</th>
                             <th>Status</th>
                             <th>Created</th>
-                            <th width="200">Actions</th>
+                            <th width="250">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="todoTableBody">
@@ -717,20 +730,22 @@
                                 </small>
                             </td>
                             <td>
-                                <button class="btn btn-info btn-action text-white btn-sm"
-                                    onclick="showTodoDetail(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['title'])) ?>', '<?= htmlspecialchars(addslashes($todo['description'])) ?>', <?= $todo['is_finished'] ? 'true' : 'false' ?>, '<?= date('d F Y - H:i', strtotime($todo['created_at'])) ?>', '<?= date('d F Y - H:i', strtotime($todo['updated_at'])) ?>')">
-                                    <i class="bi bi-eye-fill"></i>
-                                </button>
+                                <div class="action-buttons">
+                                    <button class="btn btn-info btn-action text-white btn-sm"
+                                        onclick="showTodoDetail(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['title'])) ?>', '<?= htmlspecialchars(addslashes($todo['description'])) ?>', <?= $todo['is_finished'] ? 'true' : 'false' ?>, '<?= date('d F Y - H:i', strtotime($todo['created_at'])) ?>', '<?= date('d F Y - H:i', strtotime($todo['updated_at'])) ?>')">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </button>
 
-                                <button class="btn btn-warning btn-action btn-sm"
-                                    onclick="showModalEditTodo(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['activity'])) ?>', '<?= htmlspecialchars(addslashes($todo['title'])) ?>', '<?= htmlspecialchars(addslashes($todo['description'])) ?>', <?= $todo['is_finished'] ? '1' : '0' ?>)">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>
+                                    <button class="btn btn-warning btn-action btn-sm"
+                                        onclick="showModalEditTodo(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['activity'])) ?>', '<?= htmlspecialchars(addslashes($todo['title'])) ?>', '<?= htmlspecialchars(addslashes($todo['description'])) ?>', <?= $todo['is_finished'] ? '1' : '0' ?>)">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
 
-                                <button class="btn btn-danger btn-action btn-sm"
-                                    onclick="showModalDeleteTodo(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['title'])) ?>')">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
+                                    <button class="btn btn-danger btn-action btn-sm"
+                                        onclick="showModalDeleteTodo(<?= $todo['id'] ?>, '<?= htmlspecialchars(addslashes($todo['title'])) ?>')">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
